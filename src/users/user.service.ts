@@ -2,19 +2,22 @@ import {NotAcceptableException} from '@nestjs/common';
 import {User} from './user.model';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
+import _ = require("lodash");
+
 const {hashPassword} = require('../utils/hashes/password.hash');
 export class UserService{
+    
     constructor(@InjectModel('User') private readonly UserModele: Model<User>){}
 
      async createUser(data:any){
-       const {email,firstname,lastname,password,accountType} = data;  
+       let {email,firstname,lastname,password,accountType} = data;  
 
        const userExist = await this.findUserByEmail(email);
        if(userExist.found)
        throw new NotAcceptableException('User already exist');
 
-       const hashedPassword = await hashPassword(password);
-       const newUser = await new this.UserModele({email,firstname,lastname,hashedPassword,accountType});
+       password = await hashPassword(password);
+       const newUser = await new this.UserModele({email,firstname,lastname,password,accountType});
        const result = await newUser.save();
         return {
                 success: true,

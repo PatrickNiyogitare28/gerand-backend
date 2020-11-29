@@ -15,8 +15,9 @@ export const UserSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    passowrd: {
-        type: String
+    password: {
+        type: String,
+        required: true
     },
     createdDate: {
         type: Date,
