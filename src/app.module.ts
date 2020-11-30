@@ -6,13 +6,15 @@ import { AppService } from './app.service';
 import { ConfigModule } from 'nestjs-dotenv';
 import { MongooseModule} from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
+import { MailingModule } from './mailing/mailing.module';
 
 @Module({
   imports: [
     UserModule,
     ConfigModule.forRoot(`src/config/${process.env.NODE_ENV}.env`),
     MongooseModule.forRoot('mongodb://localhost/gerend_db'),
-    AuthModule
+    AuthModule,
+    MailingModule
   ],
   controllers: [AppController],
   providers: [AppService],

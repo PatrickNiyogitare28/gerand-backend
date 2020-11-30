@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException} from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException, Request} from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
 import {User} from '../users/user.model';
 import {Model} from 'mongoose';
@@ -40,4 +40,15 @@ export class AuthService {
       throw new InternalServerErrorException(e);
   }
  } 
+
+  async decodeToken(req){
+    try{
+        const token = req.header('Bearer-Auth-Token');
+        const decoded = await this.jwtService.decode(token);
+        return decoded;
+    }
+    catch(e){
+       throw new UnauthorizedException('Invalid token'); 
+    }
+ }
 }
