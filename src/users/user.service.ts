@@ -2,7 +2,7 @@ import {NotAcceptableException} from '@nestjs/common';
 import {User} from './user.model';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
-import _ = require("lodash");
+import * as _ from 'lodash';
 import {MailingService} from '../mailing/mailing.service';
 
 const {hashPassword} = require('../utils/hashes/password.hash');
@@ -23,11 +23,11 @@ export class UserService{
        password = await hashPassword(password);
        const newUser = await new this.UserModele({email,firstname,lastname,password,accountType});
        const result = await newUser.save();
-       await this.mailingService.sendEmailVerification(result._id,firstname);
+       await this.mailingService.sendEmailVerification(result._id,firstname,email);
        return {
                 success: true,
                 message: 'User registered and Verification code sent to '+email,
-                user: result
+                user: _.pick(result,['_id','email','firstname','lastname','createdDate','accountType','userType','accountStatus'])
             };
     }
 
