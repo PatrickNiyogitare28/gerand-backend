@@ -1,11 +1,16 @@
-import {Controller,Get,Post, Body, UsePipes, ValidationPipe, HttpCode, Req} from '@nestjs/common';
+import {Controller,Get,Post, Body, UsePipes, ValidationPipe, HttpCode, Req, Param} from '@nestjs/common';
 import {ValidateUserData} from '../utils/validators/user.validator';
 import {UserService} from './user.service';
 import {AuthService} from '../auth/auth.service';
+import {MailingService} from '../mailing/mailing.service';
 
 @Controller('v1/api/users')
 export class UsersController {
-    constructor(private readonly userService: UserService, private readonly authService: AuthService){}
+    constructor(
+        private readonly userService: UserService,
+        private readonly authService: AuthService,
+        private readonly mailingService: MailingService
+        ){}
 
     @Post('/createUser')
     @UsePipes(new ValidationPipe({transform: true}))
@@ -31,5 +36,10 @@ export class UsersController {
     @Get()
     getUsers(){
         return 'Getting users';
+    }
+
+    @Get('/auth/verifyEmail/userId/:userId/code/:code')
+    verifyEmail(@Param('userId') userId: string, @Param('code') code: number){
+       return this.mailingService.verifyEmail(userId, code);
     }
 }

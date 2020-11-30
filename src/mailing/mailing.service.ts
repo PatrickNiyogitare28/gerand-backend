@@ -1,17 +1,21 @@
+import { User } from './../users/user.model';
 import { InjectModel } from '@nestjs/mongoose';
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException, NotAcceptableException, BadRequestException } from '@nestjs/common';
 import {MailerService} from '@nestjs-modules/mailer';
 import {VerifyAccount} from '../users/verifyAccount.model';
 import {Model} from 'mongoose';
+import {AuthService} from '../auth/auth.service';
 const {generateRandomCode} = require('../utils/randoms/email-verification-code');
 @Injectable()
 export class MailingService {
     constructor(
       private readonly mailerService: MailerService,
-      @InjectModel('VerifyAccount') private readonly VerifyAccountModel: Model<VerifyAccount>
+      @InjectModel('VerifyAccount') private readonly VerifyAccountModel: Model<VerifyAccount>,
+      @InjectModel('User') private readonly UserModel: Model<User>,
+      private readonly authService: AuthService
       ){}
 
-    public async sendEmailVerification(userId:string,firstname: string) {
+    public async sendEmailVerification(userId:string,firstname: string, email: string) {
         const verificationCode = await this.signVerificationCode(userId);
 
         if(!verificationCode)
@@ -20,8 +24,8 @@ export class MailingService {
         this
           .mailerService
           .sendMail({
-            to: 'patrickniyogitare28@gmail.com',
-            from: 'patrickniyogitare28@gmail.com', 
+            to: email,
+            from: process.env.EMAIL_USER, 
             subject: 'Gerand Verification email',
             template: 'emailVerification.index.hbs', 
             context: { 
@@ -59,5 +63,38 @@ export class MailingService {
              success: true,
              code: verificationCode
            }
+      }
+
+      public async verifyEmail(userId: string, code: number){
+          const verificationPayload = await this.VerifyAccountModel.findOne({userId: userId});
+          if(!verificationPayload)
+          throw new NotFoundException('User account not found');
+
+          if(verificationPayload.isVerified == true)
+          throw new NotAcceptableException('Email aready verified');
+           
+          if(verificationPayload.verificationCode != code)
+          throw new BadRequestException('Invalid verification code');
+
+          try{
+           const result =  await this.UserModel.findOneAndUpdate({_id: userId},{accountStatus: 1});
+           console.log(result);
+           await this.VerifyAccountModel.findOneAndUpdate({userId: userId}, {isVerified: true});
+            
+           const user = await this.UserModel.findOne({_id: userId});
+           const [payload, access_token] = await this.authService.signToken(user);
+           return {
+               success: true,
+               message: 'Successful email verification',
+               user: payload,
+               access_token: access_token
+           }
+
+          }
+          catch(e){
+            throw new InternalServerErrorException(e);
+          }
+          
+          
       }
 }
