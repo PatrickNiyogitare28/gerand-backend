@@ -1,4 +1,4 @@
-import {Controller,Get,Post, Body, UsePipes, ValidationPipe, HttpCode} from '@nestjs/common';
+import {Controller,Get,Post, Body, UsePipes, ValidationPipe, HttpCode, Req} from '@nestjs/common';
 import {ValidateUserData} from '../utils/validators/user.validator';
 import {UserService} from './user.service';
 import {AuthService} from '../auth/auth.service';
@@ -22,10 +22,14 @@ export class UsersController {
         return this.authService.login(email,password);
     }
 
+    @Get('/auth/jwt')
+    @HttpCode(200)
+    decodeToken(@Req() req: any){
+        return this.authService.decodeToken(req);
+    }
+
     @Get()
     getUsers(){
         return 'Getting users';
     }
-
-    
 }

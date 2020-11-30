@@ -3,11 +3,15 @@ import {User} from './user.model';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 import _ = require("lodash");
+import {MailingService} from '../mailing/mailing.service';
 
 const {hashPassword} = require('../utils/hashes/password.hash');
 export class UserService{
     
-    constructor(@InjectModel('User') private readonly UserModele: Model<User>){}
+    constructor(
+        @InjectModel('User') private readonly UserModele: Model<User>,
+        private readonly mailingService: MailingService
+    ){}
 
      async createUser(data:any){
        let {email,firstname,lastname,password,accountType} = data;  
@@ -19,9 +23,10 @@ export class UserService{
        password = await hashPassword(password);
        const newUser = await new this.UserModele({email,firstname,lastname,password,accountType});
        const result = await newUser.save();
-        return {
+       await this.mailingService.sendEmailVerification(result._id,firstname);
+       return {
                 success: true,
-                message: 'User created',
+                message: 'User registered and Verification code sent to '+email,
                 user: result
             };
     }
