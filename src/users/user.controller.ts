@@ -4,6 +4,7 @@ import {ValidateUserData} from '../utils/validators/user.validator';
 import {UserService} from './user.service';
 import {AuthService} from '../auth/auth.service';
 import {MailingService} from '../mailing/mailing.service';
+import { AccountType } from 'src/utils/enums/accountType';
 
 @Controller('v1/api/users')
 export class UsersController {
@@ -13,12 +14,21 @@ export class UsersController {
         private readonly mailingService: MailingService
         ){}
 
-    @Post('/createUser')
+    @Post('/createUserByEmail')
     @UsePipes(new ValidationPipe({transform: true}))
-    createUser(
+    createUserByEmail(
         @Body() data: ValidateUserData
+    ){  
+        // const email: AccountType;
+        return this.userService.createUser(data, AccountType.email);
+    }
+
+    @Post('/createUserByGoogle')
+    createUserByGoogle(
+        @Body() data: any
+        
     ){
-        return this.userService.createUser(data);
+        return this.userService.createUser(data, AccountType.google);
     }
    
     @Post('/auth/email/login')

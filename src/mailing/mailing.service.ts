@@ -78,7 +78,7 @@ export class MailingService {
           
           try{
            const user = await this.UserModel.findOne({_id: userId});
-           const isEmailUsed = await this.UserModel.findOne({email: user.email}, {accountStatus: 1});
+           const isEmailUsed = await this.UserModel.findOne({email: user.email, accountStatus:1});
            if(isEmailUsed)
            throw new NotAcceptableException('Email already used');
 

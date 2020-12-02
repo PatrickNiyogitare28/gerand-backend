@@ -4,7 +4,6 @@ export const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         require: true,
-        unique: true
     },
     firstname: {
         type: String,
@@ -16,8 +15,7 @@ export const UserSchema = new mongoose.Schema({
         required: true
     },
     password: {
-        type: String,
-        required: true
+        type: String
     },
     createdDate: {
         type: Date,
