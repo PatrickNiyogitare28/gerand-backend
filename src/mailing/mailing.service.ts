@@ -71,17 +71,20 @@ export class MailingService {
           throw new NotFoundException('User account not found');
 
           if(verificationPayload.isVerified == true)
-          throw new NotAcceptableException('Email aready verified');
+          throw new BadRequestException('Email aready verified');
            
           if(verificationPayload.verificationCode != code)
           throw new BadRequestException('Invalid verification code');
-
+          
           try{
-           const result =  await this.UserModel.findOneAndUpdate({_id: userId},{accountStatus: 1});
-           console.log(result);
+           const user = await this.UserModel.findOne({_id: userId});
+           const isEmailUsed = await this.UserModel.findOne({email: user.email}, {accountStatus: 1});
+           if(isEmailUsed)
+           throw new NotAcceptableException('Email already used');
+
+           await this.UserModel.findOneAndUpdate({_id: userId},{accountStatus: 1});
            await this.VerifyAccountModel.findOneAndUpdate({userId: userId}, {isVerified: true});
             
-           const user = await this.UserModel.findOne({_id: userId});
            const [payload, access_token] = await this.authService.signToken(user);
            return {
                success: true,

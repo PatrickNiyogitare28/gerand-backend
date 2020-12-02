@@ -17,7 +17,7 @@ export class UserService{
        let {email,firstname,lastname,password,accountType} = data;  
 
        const userExist = await this.findUserByEmail(email);
-       if(userExist.found)
+       if(userExist.found && userExist.user.accountStatus == 1)
        throw new NotAcceptableException('User already exist');
 
        password = await hashPassword(password);
@@ -31,7 +31,7 @@ export class UserService{
             };
     }
 
-    private async findUserByEmail(email: string){
+    async findUserByEmail(email: string){
         const user = await this.UserModele.findOne({email: email});
         if(user)
         return {

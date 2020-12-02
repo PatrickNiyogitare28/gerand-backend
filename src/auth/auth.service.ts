@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, InternalServerErrorException, Request} from '@nestjs/common';
+import { Injectable, UnauthorizedException, InternalServerErrorException, Request, BadRequestException } from '@nestjs/common';
 import {JwtService} from '@nestjs/jwt';
 import {User} from '../users/user.model';
 import {Model} from 'mongoose';
@@ -13,11 +13,12 @@ export class AuthService {
         private readonly jwtService: JwtService
  ){}
 
-  async login(email: string, password: string){
+  async emailLogin(email: string, password: string){
       const user = await this.userModel.findOne({email: email});
-      if(!user)
+      if(!user || user.accountStatus == 0)
       throw new UnauthorizedException('Invalid credentials');
-     
+      
+      
       const isPasswordValid = await argon.verify(user.password, password);
       if(!isPasswordValid)
       throw new UnauthorizedException('Invalid credentials');
@@ -51,4 +52,17 @@ export class AuthService {
        throw new UnauthorizedException('Invalid token'); 
     }
  }
+
+ async googleLogin(req){
+     if(!req.user)
+     throw new BadRequestException('Authentication with google failed');
+
+     return {
+         success: true,
+         user: req.user
+     }
+
+ }
+
+ 
 }

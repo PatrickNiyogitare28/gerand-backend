@@ -1,3 +1,4 @@
+import { GoogleStrategy } from './google.strategy';
 import { ConfigModule } from '@nestjs/config';
 import { UserSchema } from './../users/user.model';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,7 +14,7 @@ import { AuthService } from './auth.service';
     }),
   ],
   controllers: [],
-  providers: [AuthService],
+  providers: [AuthService, GoogleStrategy],
   exports: [AuthService]
 })
 export class AuthModule {}

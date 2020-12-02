@@ -1,4 +1,5 @@
-import {Controller,Get,Post, Body, UsePipes, ValidationPipe, HttpCode, Req, Param} from '@nestjs/common';
+import {Controller,Get,Post, Body, UsePipes, ValidationPipe, HttpCode, Req, Param, UseGuards} from '@nestjs/common';
+import {AuthGuard} from '@nestjs/passport';
 import {ValidateUserData} from '../utils/validators/user.validator';
 import {UserService} from './user.service';
 import {AuthService} from '../auth/auth.service';
@@ -20,11 +21,11 @@ export class UsersController {
         return this.userService.createUser(data);
     }
    
-    @Post('/auth/login')
+    @Post('/auth/email/login')
     @HttpCode(200)
     login(@Body() data: any){
         const {email, password} = data;
-        return this.authService.login(email,password);
+        return this.authService.emailLogin(email,password);
     }
 
     @Get('/auth/jwt')
@@ -33,13 +34,27 @@ export class UsersController {
         return this.authService.decodeToken(req);
     }
 
-    @Get()
-    getUsers(){
-        return 'Getting users';
-    }
-
     @Get('/auth/verifyEmail/userId/:userId/code/:code')
     verifyEmail(@Param('userId') userId: string, @Param('code') code: number){
        return this.mailingService.verifyEmail(userId, code);
+    }
+    
+   @Get('/auth/google/login')
+   @UseGuards(AuthGuard('google'))
+   googleAuth(@Req() req:any){
+
+   }
+
+   @Get('/auth/google/callback')
+   @UseGuards(AuthGuard('google'))
+   googleAuthRedirect(@Req() req:any){
+     return this.authService.googleLogin(req);
+   }
+
+
+
+    @Get()
+    getUsers(){
+        return 'Getting users';
     }
 }
