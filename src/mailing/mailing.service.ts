@@ -84,7 +84,8 @@ export class MailingService {
 
            await this.UserModel.findOneAndUpdate({_id: userId},{accountStatus: 1});
            await this.VerifyAccountModel.findOneAndUpdate({userId: userId}, {isVerified: true});
-            
+           
+           user.accountStatus=1;
            const [payload, access_token] = await this.authService.signToken(user);
            return {
                success: true,
