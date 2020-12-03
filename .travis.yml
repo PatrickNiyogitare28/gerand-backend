@@ -1,0 +1,24 @@
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+    - "node_modules"
+
+install:
+  - npm install
+
+services:
+  - mongodb
+
+env:
+  global:
+  - NODE_ENV=dev
+
+script:
+  - npm run start:dev
+after_success: 
+  - npm run test
+
+notifications:
+  email: false
