@@ -6,13 +6,15 @@ import * as _ from 'lodash';
 import {MailingService} from '../mailing/mailing.service';
 import { Enum } from 'nestjs-dotenv';
 import {AccountType} from '../utils/enums/accountType';
+import {AuthService} from '../auth/auth.service';
 
 const {hashPassword} = require('../utils/hashes/password.hash');
 export class UserService{
     
     constructor(
         @InjectModel('User') private readonly UserModele: Model<User>,
-        private readonly mailingService: MailingService
+        private readonly mailingService: MailingService,
+        private readonly authService: AuthService
     ){}
 
      async createUser(data:any, accType: AccountType){
@@ -32,7 +34,8 @@ export class UserService{
    
     
     async createUserWithEmail(data){
-       let {email,firstname,lastname,password,accountType} = data;  
+       let {email,firstname,lastname,password} = data;  
+       const accountType = AccountType.email;
        password = await hashPassword(password);
        const newUser = await new this.UserModele({email,firstname,lastname,password,accountType});
        const result = await newUser.save();
@@ -45,14 +48,19 @@ export class UserService{
     }
 
     async createUserWithGoogle(data){
-        let {email,firstname,lastname,accountType} = data;  
+        let {email,firstname,lastname} = data;  
         const accountStatus = 1;
+        const accountType = AccountType.google;
         const newUser = await new this.UserModele({email,firstname,lastname,accountType,accountStatus});
         const result = await newUser.save();  
+        const userPayloads = _.pick(result,['_id','email','firstname','lastname','createdDate','accountType','userType','accountStatus']);
+
+        const [payload,access_token] = await this.authService.signToken(userPayloads);
         return {
             success: true,
             message: 'User registered successfully',
-            user: _.pick(result,['_id','email','firstname','lastname','createdDate','accountType','userType','accountStatus'])
+            user: payload,
+            access_token
         }; 
     }
 

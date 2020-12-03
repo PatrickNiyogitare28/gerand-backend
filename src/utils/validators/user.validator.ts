@@ -23,9 +23,6 @@ export class ValidateUserData {
     @Length(6,62)
     password: string;
 
-    @IsEnum(AccountType)
-    accountType: AccountType;
-
     @IsEnum(UserType)
     @IsNotEmpty()
     userType: UserType;
