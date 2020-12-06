@@ -26,7 +26,7 @@ export class ProjectsService {
         for(let i = 0; i < users.length; i++){
             await this.findDuplicates(users, users[i]);
         } 
-
+        users.push(owner);
         const project = await new this.ProjectModel({projectName,owner,projectType,users});
         const result = await project.save();
        
@@ -52,10 +52,16 @@ export class ProjectsService {
 
     async findDuplicates(users:[], userId){
      let findDuplicates = arr => arr.filter((item, index) => arr.indexOf(item) != index)
-     let duplicates = [...new Set(findDuplicates(users))];// Unique duplicates
+     let duplicates = [...new Set(findDuplicates(users))];
 
     if(duplicates.length > 0)
     throw new NotAcceptableException("Duplicate value in users not accepted");
     
     }
+
+   async getUserProjects(req: any){
+    const currentUser:any = await this.authService.decodeToken(req);
+    const usersProjects = await this.ProjectModel.find({users: currentUser._id});
+    return usersProjects;
+   }
 }
