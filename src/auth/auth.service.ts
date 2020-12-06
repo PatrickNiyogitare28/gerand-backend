@@ -33,7 +33,7 @@ export class AuthService {
 
   public async signToken(user){
    try{
-    const payload = await _.pick(user,['email','firstname','lastname','createdDate','accountType','userType','accountStatus'] ) 
+    const payload = await _.pick(user,['_id','email','firstname','lastname','createdDate','accountType','userType','accountStatus'] ) 
     const access_token = await this.jwtService.sign(payload);
     return [payload, access_token]
    }
@@ -63,6 +63,6 @@ export class AuthService {
      }
 
  }
-
+zz
  
 }
