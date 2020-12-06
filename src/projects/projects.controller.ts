@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get } from '@nestjs/common';
 import {ProjectsService} from './projects.service';
 import {ProjectValidator} from '../utils/validators/project.validator';
 
@@ -10,5 +10,10 @@ export class ProjectsController {
  @UsePipes(new ValidationPipe({transform: true}))
  createProject(@Body() data: ProjectValidator, @Req() req: any){
     return this.projectService.createProject(data,req);
+ }
+
+ @Get('userProjects')
+ getUserProjects(@Req() req: any){
+    return this.projectService.getUserProjects(req);
  }
 }
