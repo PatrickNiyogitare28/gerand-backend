@@ -40,5 +40,4 @@ export interface User extends mongoose.Document{
     createdDate: Date,
     accountType: string,
     accountStatus: number,
-
 }

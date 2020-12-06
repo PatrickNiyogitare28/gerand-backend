@@ -7,6 +7,7 @@ import { ConfigModule } from 'nestjs-dotenv';
 import { MongooseModule} from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { MailingModule } from './mailing/mailing.module';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { MailingModule } from './mailing/mailing.module';
     ConfigModule.forRoot(`src/config/${process.env.NODE_ENV}.env`),
     MongooseModule.forRoot('mongodb://localhost/gerend_db'),
     AuthModule,
-    MailingModule
+    MailingModule,
+    ProjectsModule
   ],
   controllers: [AppController],
   providers: [AppService],
