@@ -17,6 +17,10 @@ export const UserSchema = new mongoose.Schema({
     password: {
         type: String
     },
+    userType: {
+        type: String,
+        default: 'STANDARD'
+    },
     createdDate: {
         type: Date,
         default: new Date(),
@@ -37,6 +41,7 @@ export interface User extends mongoose.Document{
     firstname: string,
     lastname: string,
     password: string,
+    userType: string,
     createdDate: Date,
     accountType: string,
     accountStatus: number,
