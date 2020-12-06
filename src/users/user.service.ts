@@ -34,10 +34,10 @@ export class UserService{
    
     
     async createUserWithEmail(data){
-       let {email,firstname,lastname,password} = data;  
+       let {email,firstname,lastname,password,userType} = data;  
        const accountType = AccountType.email;
        password = await hashPassword(password);
-       const newUser = await new this.UserModele({email,firstname,lastname,password,accountType});
+       const newUser = await new this.UserModele({email,firstname,lastname,password,userType,accountType});
        const result = await newUser.save();
        await this.mailingService.sendEmailVerification(result._id,firstname,email);
        return {

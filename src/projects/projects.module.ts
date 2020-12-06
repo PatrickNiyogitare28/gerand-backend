@@ -24,10 +24,6 @@ import{AuthService} from '../auth/auth.service';
 })
 export class ProjectsModule implements NestModule {
   configure(consumer: MiddlewareConsumer){
-    consumer.apply(AuthMiddleware)
-    .forRoutes(
-      {path: 'v1/api/projects/newProject', method: RequestMethod.POST},
-      {path: 'v1/api/projects/userProjects', method: RequestMethod.GET}
-    );
+    consumer.apply(AuthMiddleware).forRoutes(ProjectsController)
   }
 }

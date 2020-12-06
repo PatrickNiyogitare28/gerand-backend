@@ -4,6 +4,7 @@ import {Model} from 'mongoose';
 import { Project } from './project.model';
 import {AuthService} from '../auth/auth.service';
 import {User} from '../users/user.model';
+import {UserType} from '../utils/enums/userType';
 
 @Injectable()
 export class ProjectsService {
@@ -36,6 +37,28 @@ export class ProjectsService {
         }
     }
 
+    async getUserProjects(req: any){
+        const currentUser:any = await this.authService.decodeToken(req);
+        const usersProjects = await this.ProjectModel.find({users: currentUser._id});
+        return usersProjects;
+       }
+
+    async getProjectById(projectId:string,req: any){
+       const currentUser: any = await this.authService.decodeToken(req);
+       let project;
+       try{
+           if(currentUser.userType != UserType.admin){
+            return await this.ProjectModel.findOne({_id: projectId, users: currentUser._id});
+           }
+
+           else
+            return  await this.ProjectModel.findOne({_id: projectId});
+       }
+       catch(e){
+           throw new NotFoundException("Project with Id "+projectId+" not found");
+       }
+    }
+       
     async findUserById(id: string){
         try{
             const user =await this.usersModel.findOne({_id: id, accountStatus: 1});   
@@ -59,9 +82,5 @@ export class ProjectsService {
     
     }
 
-   async getUserProjects(req: any){
-    const currentUser:any = await this.authService.decodeToken(req);
-    const usersProjects = await this.ProjectModel.find({users: currentUser._id});
-    return usersProjects;
-   }
+  
 }
