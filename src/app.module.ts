@@ -8,6 +8,7 @@ import { MongooseModule} from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { MailingModule } from './mailing/mailing.module';
 import { ProjectsModule } from './projects/projects.module';
+import { LabelsModule } from './labels/labels.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { ProjectsModule } from './projects/projects.module';
     MongooseModule.forRoot('mongodb://localhost/gerend_db'),
     AuthModule,
     MailingModule,
-    ProjectsModule
+    ProjectsModule,
+    LabelsModule
   ],
   controllers: [AppController],
   providers: [AppService],

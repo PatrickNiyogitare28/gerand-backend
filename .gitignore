@@ -73,6 +73,7 @@ typings/
 .env.test
 src/config/dev.env
 src/config/prod.env
+src/config/test.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
