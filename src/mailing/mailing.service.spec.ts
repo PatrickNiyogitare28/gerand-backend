@@ -13,6 +13,6 @@ describe('MailingService', () => {
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(MailingService).toBeDefined();
   });
 });

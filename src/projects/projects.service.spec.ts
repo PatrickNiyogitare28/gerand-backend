@@ -1,3 +1,4 @@
+import { ProjectsController } from './projects.controller';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ProjectsService } from './projects.service';
 
@@ -12,7 +13,9 @@ describe('ProjectsService', () => {
     service = module.get<ProjectsService>(ProjectsService);
   });
 
+
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(ProjectsService).toBeDefined();
   });
+  
 });
