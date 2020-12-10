@@ -49,7 +49,9 @@ export class ProjectsService {
        let project;
        try{
            if(currentUser.userType != UserType.admin)
-            return await this.ProjectModel.findOne({_id: projectId, users: currentUser._id});
+            project =  await this.ProjectModel.findOne({_id: projectId, users: currentUser._id});
+            if(!project)
+            return  new NotFoundException("Project with Id "+projectId+" not found");
            
            else
             return  await this.ProjectModel.findOne({_id: projectId});
@@ -98,6 +100,31 @@ export class ProjectsService {
        return await updatedProject.save();
 
    }
+
+   async deleteProject(projectId: string, req: any){
+     const currentUser:any = await this.authService.decodeToken(req);
+     let deletableProject;
+     try{
+        deletableProject = await this.ProjectModel.findOne({_id: projectId});
+        if(!deletableProject)
+        throw new NotFoundException('Project not found//');
+     }
+     catch(e){
+         console.log(e);
+         throw new NotFoundException("Project not found.....");
+     }
+     
+     if(deletableProject.owner != currentUser._id && currentUser.userType != UserType.admin)
+     throw new UnauthorizedException("Delete access denied");
+
+     await this.ProjectModel.findOneAndDelete({_id: projectId});
+     return {
+         success: true,
+         message: "Project deleted"
+     }
+
+   }
+
     async findUserById(id: string){
         try{
             const user =await this.usersModel.findOne({_id: id, accountStatus: 1});   
@@ -108,7 +135,6 @@ export class ProjectsService {
         }
         catch(e){
             throw new NotFoundException("User with Id "+id+" not found")
-            
         }
     }
 

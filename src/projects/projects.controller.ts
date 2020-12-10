@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put, Delete } from '@nestjs/common';
 import {ProjectsService} from './projects.service';
 import {ProjectValidator} from '../utils/validators/project.validator';
 
@@ -26,4 +26,9 @@ export class ProjectsController {
  upateProject(@Param('projectId') projectId: string,@Req() req: any, @Body() data: any){
    return this.projectService.updateProject(projectId,data, req);
  } 
+
+ @Delete('deleteProject/:projectId')
+ deleteProject(@Param('projectId') projectId: string, @Req() req: any){
+    return this.projectService.deleteProject(projectId, req);
+ }
 }
