@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param } from '@nestjs/common';
 import {LabelsService} from './labels.service';
 import {LabelValidator} from '../utils/validators/label.validator';
 
@@ -16,4 +16,9 @@ export class LabelsController {
     getProjects(){
         return this.labelsService.getLabels();
     }
+    @Get('labelsByProject/projectId/:projectId')
+    getLabelsByProject(@Param('projectId') projectId: string){
+       return this.labelsService.getProjectLabels(projectId);
+    }
+    
 }
