@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get } from '@nestjs/common';
 import {LabelsService} from './labels.service';
 import {LabelValidator} from '../utils/validators/label.validator';
 
@@ -10,5 +10,10 @@ export class LabelsController {
     @UsePipes(new ValidationPipe({transform: true}))
     addLabel(@Body() data: LabelValidator, @Req() req: any){
        return this.labelsService.createLabel(data, req);
+    }
+
+    @Get('')
+    getProjects(){
+        return this.labelsService.getLabels();
     }
 }
