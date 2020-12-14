@@ -37,6 +37,10 @@ export class LabelsService {
       }
     }
 
+    async getLabels(){
+      return this.LabelModel.find();
+    }
+
     async findProject(projectId:string){
       let projectPayloads = await this.projectService.findProjectById(projectId);
        const {exist, project} = projectPayloads;
@@ -58,4 +62,5 @@ export class LabelsService {
         return false;
       }
     }
+    
 }
