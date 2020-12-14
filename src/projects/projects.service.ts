@@ -147,10 +147,9 @@ export class ProjectsService {
     
     }
 
-   async findProjectById(projectId: string){
+   async findProjectById(projectId){
        let exist:boolean, project:any;
        try{
-           console.log(projectId);
            project = await this.ProjectModel.findOne({_id: projectId});
            if(!project)
            return {

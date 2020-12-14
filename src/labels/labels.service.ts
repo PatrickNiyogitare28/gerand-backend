@@ -41,6 +41,12 @@ export class LabelsService {
       return this.LabelModel.find();
     }
 
+    async getProjectLabels(projectId: string){
+       const projectExist = await this.findProject(projectId);
+       if(projectExist)
+       return this.LabelModel.find({projectId: projectId});
+    }
+
     async findProject(projectId:string){
       let projectPayloads = await this.projectService.findProjectById(projectId);
        const {exist, project} = projectPayloads;
