@@ -7,7 +7,7 @@
 
 
 <h3>PivotolTracker Stories</h3>
-<p>A progressive <a href="https://www.pivotaltracker.com/n/projects/2477765" target="_blank">Gerand Pivotoltracker</a> framework for building efficient and scalable server-side applications.</p>
+<p><a href="https://www.pivotaltracker.com/n/projects/2477765" target="_blank">Gerand Pivotoltracker</a></p>
 <br><br><br>
 
 <h3>Technology Used</h3>
@@ -37,8 +37,9 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
+-  The project is fully opened for PRs
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+
 
 ## Installation
 
