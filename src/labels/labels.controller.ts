@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put } from '@nestjs/common';
 import {LabelsService} from './labels.service';
-import {LabelValidator} from '../utils/validators/label.validator';
+import {LabelValidator, updatedLabelValidator} from '../utils/validators/label.validator';
 
 @Controller('v1/api/labels')
 export class LabelsController {
@@ -24,5 +24,11 @@ export class LabelsController {
     @Get('labelById/labelId/:labelId')
     getLabelById(@Param('labelId') labelId: string){
       return this.labelsService.getLabelById(labelId);
+    }
+
+    @Put('updateLabel/labelId/:labelId')
+    @UsePipes(new ValidationPipe({transform: true}))
+    updateLabel(@Param('labelId') labelId: string, @Body() data: updatedLabelValidator){
+        return this.labelsService.updateLabel(labelId, data);
     }
 }
