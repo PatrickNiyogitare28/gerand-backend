@@ -21,4 +21,8 @@ export class LabelsController {
        return this.labelsService.getProjectLabels(projectId);
     }
     
+    @Get('labelById/labelId/:labelId')
+    getLabelById(@Param('labelId') labelId: string){
+      return this.labelsService.getLabelById(labelId);
+    }
 }
