@@ -47,6 +47,12 @@ export class LabelsService {
        return this.LabelModel.find({projectId: projectId});
     }
 
+    async getLabelById(labelId:string){
+      console.log(labelId);
+      return this.findLabelById(labelId);
+    }
+   
+
     async findProject(projectId:string){
       let projectPayloads = await this.projectService.findProjectById(projectId);
        const {exist, project} = projectPayloads;
@@ -55,6 +61,7 @@ export class LabelsService {
 
        return project;
     }
+
 
     async findLabelName(labelName){
       try{
@@ -66,6 +73,20 @@ export class LabelsService {
       }
       catch(e){
         return false;
+      }
+    }
+
+    async findLabelById(id:string){
+      let label;
+      try{
+        label = await this.LabelModel.findById(id);
+        if(!label)
+        throw new NotFoundException('Label not found');
+
+        return label;
+      }
+      catch(e){
+          throw new NotFoundException('Label not found');
       }
     }
     
