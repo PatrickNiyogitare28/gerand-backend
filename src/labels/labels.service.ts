@@ -48,10 +48,17 @@ export class LabelsService {
     }
 
     async getLabelById(labelId:string){
-      console.log(labelId);
       return this.findLabelById(labelId);
     }
    
+
+    async updateLabel(labelId: string,data:any){
+       let label = await this.findLabelById(labelId);
+       const {labelName} = data;
+       label.labelName = labelName;
+       label.save();
+       return label;
+    }
 
     async findProject(projectId:string){
       let projectPayloads = await this.projectService.findProjectById(projectId);

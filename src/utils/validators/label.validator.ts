@@ -10,3 +10,11 @@ export class LabelValidator {
     @IsNotEmpty()
     projectId: string;
 }
+
+
+export class updatedLabelValidator{
+    @IsString()
+    @Length(2, 100)
+    @IsNotEmpty()
+    labelName: string
+}
