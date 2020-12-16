@@ -1,5 +1,5 @@
 import { AuthService } from './../auth/auth.service';
-import { Injectable, NotFoundException, NotAcceptableException } from '@nestjs/common';
+import { Injectable, NotFoundException, NotAcceptableException, UnauthorizedException } from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 import {Label} from './labelmodel';
@@ -59,6 +59,23 @@ export class LabelsService {
        label.save();
        return label;
     }
+
+    async deleteLabel(labelId: string, req: any){
+      const label = await this.findLabelById(labelId);
+      const projectPayload = await this.findProject(label.projectId);
+      const currentUser:any = await this.authService.decodeToken(req);
+      
+      const isProjectUser = projectPayload.users.findIndex(userId => userId == currentUser._id);
+      if(isProjectUser == -1)
+      return new UnauthorizedException('You have no access');
+
+      await this.LabelModel.findOneAndDelete({_id: labelId});
+      return {
+        success: true,
+        message: 'label removed successfully'
+      }
+    }
+
 
     async findProject(projectId:string){
       let projectPayloads = await this.projectService.findProjectById(projectId);

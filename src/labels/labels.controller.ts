@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put, Delete } from '@nestjs/common';
 import {LabelsService} from './labels.service';
 import {LabelValidator, updatedLabelValidator} from '../utils/validators/label.validator';
 
@@ -30,5 +30,10 @@ export class LabelsController {
     @UsePipes(new ValidationPipe({transform: true}))
     updateLabel(@Param('labelId') labelId: string, @Body() data: updatedLabelValidator){
         return this.labelsService.updateLabel(labelId, data);
+    }
+
+    @Delete('deleteLabel/labelId/:labelId')
+    deleteLabel(@Param('labelId') labelId: string, @Req() req: any){
+        return this.labelsService.deleteLabel(labelId, req);
     }
 }
