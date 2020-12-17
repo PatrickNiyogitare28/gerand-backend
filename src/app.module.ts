@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { MailingModule } from './mailing/mailing.module';
 import { ProjectsModule } from './projects/projects.module';
 import { LabelsModule } from './labels/labels.module';
+import { ListsModule } from './lists/lists.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { LabelsModule } from './labels/labels.module';
     AuthModule,
     MailingModule,
     ProjectsModule,
-    LabelsModule
+    LabelsModule,
+    ListsModule
   ],
   controllers: [AppController],
   providers: [AppService],
