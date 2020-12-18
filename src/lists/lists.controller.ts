@@ -23,4 +23,9 @@ export class ListsController {
     getListById(@Param('listId') listId: string){
       return this.listsService.getListById(listId);
     }
+
+    @Get('getListByProject/projectId/:projectId')
+    getListByProject(@Param('projectId') projectId: string, @Req() req: any){
+      return this.listsService.getListsByProject(projectId, req);
+    }
 }
