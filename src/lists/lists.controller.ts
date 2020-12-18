@@ -14,6 +14,11 @@ export class ListsController {
      return this.listsService.createList(data,req);
     }
 
+    @Get('')
+    getAllLists(){
+     return this.listsService.getAllLists();
+    }
+
     @Get('getListById/listId/:listId')
     getListById(@Param('listId') listId: string){
       return this.listsService.getListById(listId);
