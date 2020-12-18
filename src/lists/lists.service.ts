@@ -34,6 +34,9 @@ export class ListsService {
     }
   }
 
+  async getAllLists(){
+    return this.ListModel.find();
+  }
   async getListById(listId: string){
       try{
           let list = await this.ListModel.findById(listId)
