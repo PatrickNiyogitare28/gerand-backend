@@ -1,5 +1,5 @@
 import { ListsService } from './lists.service';
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param } from '@nestjs/common';
 import {ListValidator} from '../utils/validators/list.validator';
 
 @Controller('v1/api/lists')
@@ -12,5 +12,10 @@ export class ListsController {
     @UsePipes(new ValidationPipe({transform: true}))
     createList(@Body() data: ListValidator, @Req() req: any){
      return this.listsService.createList(data,req);
+    }
+
+    @Get('getListById/listId/:listId')
+    getListById(@Param('listId') listId: string){
+      return this.listsService.getListById(listId);
     }
 }

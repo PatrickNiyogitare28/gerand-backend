@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException, NotAcceptableException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, NotAcceptableException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { ProjectsService } from './../projects/projects.service';
 import { AuthService } from './../auth/auth.service';
 import { UserType} from '../utils/enums/userType';
@@ -34,6 +34,19 @@ export class ListsService {
     }
   }
 
+  async getListById(listId: string){
+      try{
+          let list = await this.ListModel.findById(listId)
+          if(!list)
+          throw new NotFoundException("List not found");
+          
+          return list;
+      }
+      catch(e){
+       throw new NotFoundException("List not found");
+      }
+  }
+
   async findListByName(listName:string){
       let list;
       try{
@@ -47,4 +60,5 @@ export class ListsService {
          throw new NotAcceptableException(e);
       }
   }
+  
 }
