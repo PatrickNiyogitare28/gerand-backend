@@ -50,6 +50,17 @@ export class ListsService {
       }
   }
 
+  async getListsByProject(projectId: string, req:any){
+      const project = await this.projectService.getProjectById(projectId, req);
+      const currentUser:any = await this.authService.decodeToken(req);
+
+      const isMember = project.users.findIndex(id => id == currentUser._id);
+      if(isMember == -1 && currentUser.userType != UserType.admin)
+      throw new UnauthorizedException('Access denied for none project members');
+
+      return this.ListModel.find({projectId: projectId});
+  }
+
   async findListByName(listName:string){
       let list;
       try{
