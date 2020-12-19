@@ -1,5 +1,5 @@
 import { ListsService } from './lists.service';
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put } from '@nestjs/common';
 import {ListValidator} from '../utils/validators/list.validator';
 
 @Controller('v1/api/lists')
@@ -27,5 +27,10 @@ export class ListsController {
     @Get('getListByProject/projectId/:projectId')
     getListByProject(@Param('projectId') projectId: string, @Req() req: any){
       return this.listsService.getListsByProject(projectId, req);
+    }
+
+    @Put('upateListName/listId/:listId')
+    updateListName(@Param('listId') listId: string, @Body('listName') listName:string, @Req() req: any){
+      return this.listsService.updateListName(listId,listName,req);
     }
 }

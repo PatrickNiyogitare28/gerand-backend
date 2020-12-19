@@ -50,6 +50,19 @@ export class ListsService {
       }
   }
 
+  async updateListName(listId: string,listName: string, req:any){
+     const list = await this.getListById(listId);
+     await this.projectService.getProjectById(list.projectId,req);
+
+     list.listName = listName;
+     await list.save();
+
+     return {
+         success: true,
+         list
+     }
+  }
+
   async getListsByProject(projectId: string, req:any){
       const project = await this.projectService.getProjectById(projectId, req);
       const currentUser:any = await this.authService.decodeToken(req);
