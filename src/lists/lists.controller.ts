@@ -1,6 +1,8 @@
 import { ListsService } from './lists.service';
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put, Delete } from '@nestjs/common';
 import {ListValidator} from '../utils/validators/list.validator';
+import { UpdateListNameValidator } from './../utils/validators/list.validator';
+
 
 @Controller('v1/api/lists')
 export class ListsController {
@@ -30,7 +32,13 @@ export class ListsController {
     }
 
     @Put('upateListName/listId/:listId')
-    updateListName(@Param('listId') listId: string, @Body('listName') listName:string, @Req() req: any){
-      return this.listsService.updateListName(listId,listName,req);
+    @UsePipes(new ValidationPipe({transform: true}))
+    updateListName(@Param('listId') listId: string, @Body() data:UpdateListNameValidator, @Req() req: any){
+      return this.listsService.updateListName(listId,data,req);
+    }
+
+    @Delete('deleteList/listId/:listId')
+    deleteList(@Param('listId') listId: string, @Req() req: any){
+      return this.listsService.deleteList(listId, req);
     }
 }

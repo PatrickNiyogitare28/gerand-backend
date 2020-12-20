@@ -50,17 +50,32 @@ export class ListsService {
       }
   }
 
-  async updateListName(listId: string,listName: string, req:any){
+  async updateListName(listId: string,data: any, req:any){
      const list = await this.getListById(listId);
      await this.projectService.getProjectById(list.projectId,req);
 
-     list.listName = listName;
+     await this.findListByName(data.listName)
+     list.listName = data.listName;
      await list.save();
 
      return {
          success: true,
          list
      }
+  }
+
+  async deleteList(listId:string, req:any){
+    const list = await this.getListById(listId);
+    const currentUser: any = await this.authService.decodeToken(req);
+    if(currentUser.userType != UserType.admin)
+    await this.projectService.getProjectById(list.projectId,req);
+
+    const removedList = await this.ListModel.findOneAndDelete({_id: listId});
+    return {
+        success: true,
+        message:'List removed successfully',
+        removedList
+    }
   }
 
   async getListsByProject(projectId: string, req:any){
