@@ -11,3 +11,10 @@ export class ListValidator{
     @IsNotEmpty()
     projectId: string
 }
+
+export class UpdateListNameValidator{
+    @IsString()
+    @Length(2,32)
+    @IsNotEmpty()
+    listName: string
+}
