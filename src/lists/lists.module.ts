@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { IsAdminMiddleware } from './../middlewares/isAdmin.middleware';
 import { AuthMiddleware } from './../middlewares/auth.middlware';
 import { ListSchema } from './list.model';
@@ -15,11 +16,8 @@ import configuration from '../config/configuration';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({envFilePath: `src/config/${process.env.NODE_ENV}.env`, load: [configuration]}),
-    MongooseModule.forFeature([
-      {name: 'User', schema: UserSchema},
-      {name:'Project', schema: ProjectSchema},
-      {name: 'List', schema: ListSchema}
+    SharedModule,
+    MongooseModule.forFeature([{name: 'List', schema: ListSchema}
     ]),
     JwtModule.register({
       secret: process.env.SECRET_KEY,
@@ -28,6 +26,7 @@ import configuration from '../config/configuration';
   providers: [ListsService, AuthService, ProjectsService],
   controllers: [ListsController]
 })
+
 export class ListsModule implements NestModule {
   configure(consumer: MiddlewareConsumer){
     consumer.apply(IsAdminMiddleware).forRoutes({path: 'v1/api/lists', method: RequestMethod.GET}),

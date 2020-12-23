@@ -10,6 +10,7 @@ import { MailingModule } from './mailing/mailing.module';
 import { ProjectsModule } from './projects/projects.module';
 import { LabelsModule } from './labels/labels.module';
 import { ListsModule } from './lists/lists.module';
+import { SharedModule } from './shared/shared.module';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { ListsModule } from './lists/lists.module';
     MailingModule,
     ProjectsModule,
     LabelsModule,
-    ListsModule
+    ListsModule,
+    SharedModule
   ],
   controllers: [AppController],
   providers: [AppService],

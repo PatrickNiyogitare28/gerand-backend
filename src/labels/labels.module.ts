@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
@@ -15,14 +16,9 @@ import {labelSchema} from './labelmodel';
 import { AuthMiddleware } from './../middlewares/auth.middlware';
 import configuration from '../config/configuration';
 
-
 @Module({
   imports: [
-    ConfigModule.forRoot({envFilePath: `src/config/${process.env.NODE_ENV}.env`, load: [configuration]}),
-    MongooseModule.forFeature([{name: 'User', schema: UserSchema},{name:'Project', schema: ProjectSchema}]),
-    JwtModule.register({
-      secret: process.env.SECRET_KEY,
-    }),
+    SharedModule,
     MongooseModule.forFeature([{name: 'Label', schema: labelSchema}])
   ],
   providers: [LabelsService,ProjectsService, AuthService],
