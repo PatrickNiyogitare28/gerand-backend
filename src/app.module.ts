@@ -1,3 +1,4 @@
+import { StoriesModule } from './stories/stories.module';
 // import * as dotenv from 'dotenv';
 import { UserModule } from './users/user.module';
 import { Module } from '@nestjs/common';
@@ -22,7 +23,8 @@ import { SharedModule } from './shared/shared.module';
     ProjectsModule,
     LabelsModule,
     ListsModule,
-    SharedModule
+    SharedModule,
+    StoriesModule
   ],
   controllers: [AppController],
   providers: [AppService],

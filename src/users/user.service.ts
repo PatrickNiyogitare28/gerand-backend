@@ -1,4 +1,4 @@
-import {NotAcceptableException} from '@nestjs/common';
+import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import {User} from './user.model';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
@@ -74,6 +74,19 @@ export class UserService{
 
         return{
             found: false
+        }
+    }
+
+    async findUserById(userId: string){
+        try{
+            const user = await this.UserModele.findOne({_id: userId});
+            if(!user)
+            throw new NotFoundException("User not found");
+
+            return user;
+        }
+        catch(e){
+            return new NotFoundException("User not found");
         }
     }
 }
