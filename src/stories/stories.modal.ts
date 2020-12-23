@@ -7,6 +7,10 @@ export const StorySchema = new mongoose.Schema({
        required: true,
        unique: true
     },
+    storyName: {
+      type: String,
+      required: true
+    },
     projectId: {
         type: String,
         require: true
@@ -30,7 +34,6 @@ export const StorySchema = new mongoose.Schema({
     },
     dueDate: {
         type: Date,
-        default: new Date
     },
     storyType: {
         type: storyType
@@ -39,13 +42,17 @@ export const StorySchema = new mongoose.Schema({
         type: String
     },
     tasks: [],
-    blockers: []
+    blockers: [],
+    description: {
+       type:String
+    }
 })
 
 export interface Story extends mongoose.Model{
     _id: string,
     displayedId: string,
     projectId: string,
+    storyName:string,
     labelId: string,
     listId: string,
     owner: string,
@@ -54,7 +61,8 @@ export interface Story extends mongoose.Model{
     dueDate: Date,
     storyType: storyType,
     pullRequestURL: string,
-    tesks: [],
-    blocker: []
+    tasks: [],
+    blocker: [],
+    description:string
 
 }
