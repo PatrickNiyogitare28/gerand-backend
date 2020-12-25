@@ -41,7 +41,7 @@ export class StoryValidator{
   tasks: []
 
   @IsArray()
-  blocker: []
+  blockers: []
 
   @IsString()
   description:string

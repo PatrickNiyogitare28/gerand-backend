@@ -1,4 +1,4 @@
-import {IsEmail, IsInt, IsNumber, IsNotEmpty, Length, IsString,IsEnum } from 'class-validator';
+import {IsEmail, IsInt, IsNumber, IsNotEmpty, Length, IsString,IsEnum, IsArray } from 'class-validator';
 import {AccountType} from '../enums/accountType';
 import {UserType} from '../enums/userType';
 
@@ -26,5 +26,4 @@ export class ValidateUserData {
     @IsEnum(UserType)
     @IsNotEmpty()
     userType: UserType;
-    
 }
