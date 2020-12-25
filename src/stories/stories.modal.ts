@@ -62,7 +62,7 @@ export interface Story extends mongoose.Model{
     storyType: storyType,
     pullRequestURL: string,
     tasks: [],
-    blocker: [],
+    blockers: [],
     description:string
 
 }
