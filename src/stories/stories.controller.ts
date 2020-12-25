@@ -17,4 +17,9 @@ export class StoriesController {
     getStoryById(@Param('storyId') storyId: string){
       return this.storiesService.getStoryById(storyId);
     }
+
+    @Get('getStoreisByProject/projectId/:projectId')
+      getStoriesByProject(@Param('projectId') projectId: string){
+      return this.storiesService.getStoriesByProjectId(projectId);
+    }
 }

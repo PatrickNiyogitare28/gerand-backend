@@ -11,6 +11,7 @@ import { ListsService } from './../lists/lists.service';
 import { LabelsService } from './../labels/labels.service';
 import { Story } from './stories.modal';
 import { Project } from './../projects/project.model';
+import { callbackify } from 'util';
 
 const {generateDisplayedId} = require('../utils/randoms/storyIdGenerator');
 
@@ -68,8 +69,7 @@ export class StoriesService {
            pullRequestURL,
            tasks,
            blockers,
-
-       }
+        }
     }
 
     async getStoryById(storyId: string){
@@ -103,6 +103,17 @@ export class StoriesService {
             blockers,
         }
     }
+
+    async getStoriesByProjectId(projectId: string){
+        const {exist, project} = await this.projectService.findProjectById(projectId);
+        if(exist == false)
+        throw new NotFoundException("Project not found");
+        
+        return await this.StoryModel.find({projectId: projectId});
+     }
+
+  
+
     async findStoryById(storyId: string){
         console.log(storyId)
         try{
