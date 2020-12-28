@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put } from '@nestjs/common';
 import {StoriesService} from './stories.service';
 import {StoryValidator} from '../utils/validators/story.validator';
 @Controller('v1/api/stories')
@@ -21,5 +21,10 @@ export class StoriesController {
     @Get('getStoreisByProject/projectId/:projectId')
       getStoriesByProject(@Param('projectId') projectId: string){
       return this.storiesService.getStoriesByProjectId(projectId);
+    }
+
+    @Put('updateStory/storyId/:storyId')
+    updateStory(@Param('storyId') storyId: string, @Body() data: any){
+      return this.storiesService.updateStory(storyId, data);
     }
 }

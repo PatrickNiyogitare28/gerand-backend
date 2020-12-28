@@ -12,6 +12,7 @@ import { LabelsService } from './../labels/labels.service';
 import { Story } from './stories.modal';
 import { Project } from './../projects/project.model';
 import { callbackify } from 'util';
+import { exists } from 'fs';
 
 const {generateDisplayedId} = require('../utils/randoms/storyIdGenerator');
 
@@ -86,8 +87,8 @@ export class StoriesService {
         const storyRequester: User = await this.userServce.findUserById(requester);
         return {
             success: true,
-            message: 'Story created successfully',
             _id,
+            storyName,
             displayedId,
             project,
             storyRequester,
@@ -112,7 +113,53 @@ export class StoriesService {
         return await this.StoryModel.find({projectId: projectId});
      }
 
-  
+  async updateStory(storyId: string,data: any){
+    const {projectId,storyName,labelId,listId,owner,storyType,pullRequestURL,tasks,blockers,description} = data;
+    const updatableStory = await this.findStoryById(storyId);
+    
+    let projectExist,project,label,list,storyOwner;
+    if(projectId)
+        projectExist = await this.projectService.findProjectById(projectId);
+        if(projectExist.exist == false)
+        throw new NotFoundException("Project not found");
+        project = projectExist.project;
+        updatableStory['projectId']=projectId;
+        
+
+    if(labelId)
+        label = await this.labelService.findLabelById(labelId);
+        updatableStory['labelId']=labelId;
+
+    if(listId)
+         list = await this.listsService.getListById(listId);    
+         updatableStory['listId']=listId;
+   
+    if(storyName)
+         updatableStory['storyName']=storyName;
+         
+    if(owner)
+         storyOwner = await this.userServce.findUserById(owner);
+         updatableStory['owner']=owner; 
+    
+    if(storyType)
+         updatableStory['storyType']=storyType;
+    
+    if(pullRequestURL)
+         updatableStory['pullRequestURL']=pullRequestURL;
+
+    if(tasks)
+       updatableStory['pullRequestURL']=pullRequestURL;
+         
+    if(blockers)
+        updatableStory['blockers']=blockers;
+
+          
+   if(description)
+      updatableStory['description']=description;    
+      
+    const newStoryData = await updatableStory.save();    
+    return newStoryData;     
+  }
 
     async findStoryById(storyId: string){
         console.log(storyId)
