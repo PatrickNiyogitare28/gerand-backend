@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put } from '@nestjs/common';
+import { Controller, Post, Body, Req, UsePipes, ValidationPipe, Get, Param, Put, Delete } from '@nestjs/common';
 import {StoriesService} from './stories.service';
 import {StoryValidator} from '../utils/validators/story.validator';
 @Controller('v1/api/stories')
@@ -26,5 +26,10 @@ export class StoriesController {
     @Put('updateStory/storyId/:storyId')
     updateStory(@Param('storyId') storyId: string, @Body() data: any){
       return this.storiesService.updateStory(storyId, data);
+    }
+
+    @Delete('deleteStory/storyId/:storyId')
+    deleteStory(@Param('storyId') storyId: string, @Req() req: any){
+      return this.storiesService.deleteStory(storyId, req);
     }
 }

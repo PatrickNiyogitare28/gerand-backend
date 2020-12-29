@@ -1,9 +1,10 @@
+import { UserType } from './../utils/enums/userType';
 import { User } from './../users/user.model';
 import { Label } from './../labels/labelmodel';
 import { List } from './../lists/list.model';
 import { InjectModel } from '@nestjs/mongoose';
 import {Model} from 'mongoose';
-import { Injectable, NotFoundException, NotAcceptableException } from '@nestjs/common';
+import { Injectable, NotFoundException, NotAcceptableException, UnauthorizedException } from '@nestjs/common';
 import { ProjectsService } from './../projects/projects.service';
 import { AuthService } from './../auth/auth.service';
 import { UserService } from './../users/user.service';
@@ -161,6 +162,26 @@ export class StoriesService {
     return newStoryData;     
   }
 
+  async deleteStory(storyId: string, req:any){
+      const currentUser:any = await this.authService.decodeToken(req);
+      let story: Story = await this.findStoryById(storyId);
+
+      const {_id,projectId} = story;
+
+      const {project} = await this.projectService.findProjectById(projectId);
+      const isProjectMember = project.users.indexOf(currentUser._id);
+      if(currentUser.userType != UserType.admin && isProjectMember)
+        throw new UnauthorizedException("Access denied for not project members");
+
+      await this.StoryModel.findByIdAndDelete(_id);
+      return {
+          success:'true',
+          message:'Story deleted',
+          story
+      }
+      
+  } 
+
     async findStoryById(storyId: string){
         console.log(storyId)
         try{
@@ -175,4 +196,6 @@ export class StoriesService {
         }
 
     }
+
+    
 }
