@@ -12,6 +12,7 @@ import { ProjectsModule } from './projects/projects.module';
 import { LabelsModule } from './labels/labels.module';
 import { ListsModule } from './lists/lists.module';
 import { SharedModule } from './shared/shared.module';
+import { SprintsModule } from './sprints/sprints.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { SharedModule } from './shared/shared.module';
     LabelsModule,
     ListsModule,
     SharedModule,
-    StoriesModule
+    StoriesModule,
+    SprintsModule
   ],
   controllers: [AppController],
   providers: [AppService],
