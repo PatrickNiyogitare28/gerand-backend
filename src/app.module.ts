@@ -18,7 +18,9 @@ import { SprintsModule } from './sprints/sprints.module';
   imports: [
     UserModule,
     ConfigModule.forRoot(`src/config/${process.env.NODE_ENV}.env`),
-    MongooseModule.forRoot('mongodb://localhost/gerend_db'),
+    MongooseModule.forRoot('mongodb://localhost/gerend_db',{
+      useFindAndModify: false
+    }),
     AuthModule,
     MailingModule,
     ProjectsModule,
