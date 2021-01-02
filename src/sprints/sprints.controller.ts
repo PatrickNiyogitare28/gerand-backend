@@ -1,5 +1,6 @@
-import { Controller, Post, Body, Req } from '@nestjs/common';
+import { Controller, Post, Body, Req,UsePipes,ValidationPipe } from '@nestjs/common';
 import { SprintsService } from './sprints.service';
+import { SprintValidator } from './../utils/validators/sprint.validator';
 
 
 @Controller('v1/api/sprints')
@@ -7,7 +8,8 @@ export class SprintsController {
     constructor(private readonly sprintService: SprintsService){}
 
     @Post('newSprint')
-    addSprint(@Body() data: any, @Req() req: any){
+    @UsePipes(new ValidationPipe({transform: true, skipMissingProperties: true}))
+    addSprint(@Body() data: SprintValidator, @Req() req: any){
         return this.sprintService.createSprint(data,req);
     }
 }
