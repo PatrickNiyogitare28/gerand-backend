@@ -9,6 +9,8 @@ import { Module} from '@nestjs/common';
 import configuration from '../config/configuration';
 import {UserSchema} from '../users/user.model';
 import {ProjectSchema} from '../projects/project.model';
+import { SprintSchema } from './../sprints/sprints.modal';
+
 
 @Module({
  imports: [
@@ -20,6 +22,7 @@ import {ProjectSchema} from '../projects/project.model';
       {name: 'List', schema: ListSchema},
       {name: 'Label', schema: labelSchema},
       {name: 'VerifyAccount', schema: verifyAccountSchema},
+      {name: 'Sprint', schema: SprintSchema}
   ]),
     JwtModule.register({
       secret: process.env.SECRET_KEY,
