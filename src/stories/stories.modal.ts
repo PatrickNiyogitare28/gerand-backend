@@ -15,6 +15,10 @@ export const StorySchema = new mongoose.Schema({
         type: String,
         require: true
     },
+    sprintId: {
+        type: String,
+        require: true
+    },
     labelId: {
         type: String,
     },
@@ -52,6 +56,7 @@ export interface Story extends mongoose.Model{
     _id: string,
     displayedId: string,
     projectId: string,
+    sprintId: string,
     storyName:string,
     labelId: string,
     listId: string,
