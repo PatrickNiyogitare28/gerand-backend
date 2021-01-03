@@ -51,10 +51,10 @@ export class SprintsService {
         try{
             sprint = await this.SprintModal.findById(sprintId);
             if(!sprint)
-            return new NotFoundException('Srint not found');
+            throw new NotFoundException('Srint not found');
         }
          catch(e){
-            return new NotFoundException("Sprint not found");
+            throw new NotFoundException("Sprint not found");
         }
        const {project} = await this.projectService.findProjectById(sprint.projectId);
        return {

@@ -1,7 +1,4 @@
-import { UserType } from './../utils/enums/userType';
-import { User } from './../users/user.model';
-import { Label } from './../labels/labelmodel';
-import { List } from './../lists/list.model';
+;
 import { InjectModel } from '@nestjs/mongoose';
 import {Model} from 'mongoose';
 import { Injectable, NotFoundException, NotAcceptableException, UnauthorizedException } from '@nestjs/common';
@@ -11,6 +8,11 @@ import { UserService } from './../users/user.service';
 import { ListsService } from './../lists/lists.service';
 import { LabelsService } from './../labels/labels.service';
 import { Story } from './stories.modal';
+import { SprintsService } from './../sprints/sprints.service';
+import { UserType } from './../utils/enums/userType';
+import { User } from './../users/user.model';
+import { Label } from './../labels/labelmodel';
+import { List } from './../lists/list.model'
 
 
 const {generateDisplayedId} = require('../utils/randoms/storyIdGenerator');
@@ -23,11 +25,12 @@ export class StoriesService {
        private readonly authService: AuthService,
        private readonly userServce: UserService,
        private readonly listsService: ListsService,
-       private readonly labelService: LabelsService
+       private readonly labelService: LabelsService,
+       private readonly sprintService: SprintsService
     ){}
 
     async createProject(data: any, req: any){
-        const {projectId,storyName,labelId,listId,owner,storyType,pullRequestURL,tasks,blockers,description} = data;
+        const {projectId,storyName,labelId,listId,owner,storyType,pullRequestURL,tasks,blockers,description,sprintId} = data;
         const currentUser:any = await this.authService.decodeToken(req);
         const requester = currentUser._id;
 
@@ -47,6 +50,8 @@ export class StoriesService {
         if(isOwnerProjectMember == -1)
         throw new NotAcceptableException("Owner is not a project member");
 
+        const sprintExist:any = await this.sprintService.findSprintById(sprintId);
+
         const displayedId = await generateDisplayedId();
 
        const newStory = await new this.StoryModel({displayedId,projectId,storyName,labelId,listId,requester,owner,storyType,pullRequestURL,tasks,blockers,description});
@@ -58,6 +63,7 @@ export class StoriesService {
            _id: newStory._id,
            displayedId: newStory.displayedId,
            project: projectExist,
+           sprint: sprintExist.sprint,
            requester: currentUser,
            storyType,
            label,
