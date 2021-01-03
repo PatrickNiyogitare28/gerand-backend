@@ -46,5 +46,21 @@ export class SprintsService {
           }
      }
 
-     // TODO-- define the sprintId in the story fields
+    async findSprintById(sprintId: string){
+        let sprint:Sprint;
+        try{
+            sprint = await this.SprintModal.findById(sprintId);
+            if(!sprint)
+            return new NotFoundException('Srint not found');
+        }
+         catch(e){
+            return new NotFoundException("Sprint not found");
+        }
+       const {project} = await this.projectService.findProjectById(sprint.projectId);
+       return {
+           sprint,
+           project
+       }
+       
+    }
 }
