@@ -17,4 +17,9 @@ export class SprintsController {
     getSprintById(@Param('sprintId') sprintId: any){
        return this.sprintService.findSprintById(sprintId)
     }
+
+    @Get('getSprintsByProjectId/projectId/:projectId')
+    getSprintsByProject(@Param('projectId') projectId: any){
+        return this.sprintService.getSprintsByProject(projectId);
+    }
 }

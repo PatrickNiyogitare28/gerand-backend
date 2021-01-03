@@ -63,4 +63,13 @@ export class SprintsService {
        }
        
     }
+
+    async getSprintsByProject(projectId: string){
+        const {exist, project} = await this.projectService.findProjectById(projectId);
+        if(exist == false)
+        return new NotFoundException("Project not found");
+
+        const sprints:[] = await this.SprintModal.find({projectId});
+        return sprints;
+    }
 }
