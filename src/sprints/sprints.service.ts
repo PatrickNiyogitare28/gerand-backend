@@ -6,6 +6,7 @@ import { ProjectsService } from './../projects/projects.service';
 import {Sprint} from './sprints.modal';
 import {Project} from '../projects/project.model';
 import {sprintStatus} from '../utils/enums/sprintStatus';
+import { isFunction } from 'lodash';
 
 
 @Injectable()
@@ -72,4 +73,27 @@ export class SprintsService {
         const sprints:[] = await this.SprintModal.find({projectId});
         return sprints;
     }
+
+    async udpateSprint(sprintId: string,data:any){
+        const updatableSprint = await this.findSprintById(sprintId);
+        const sprint:any = updatableSprint.sprint;
+        const {sprintName, status, startDate,endDate} = data;
+        
+        if(sprintName)
+        sprint.sprintName = sprintName;
+
+        if(status)
+        sprint.status = status;
+
+        if(startDate)
+        sprint.startDate = startDate;
+
+        if(endDate)
+        sprint.endDate = endDate;
+
+        await sprint.save();
+        return sprint
+       
+    }
+    
 }

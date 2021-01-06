@@ -16,7 +16,7 @@ export const SprintSchema = new mongoose.Schema({
     },
     startDate: {
         type: Date,
-        deafult: new Date()
+        deafult: new Date
     },
     endDate: {
         type: Date,
