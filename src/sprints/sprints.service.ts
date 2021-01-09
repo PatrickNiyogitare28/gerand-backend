@@ -75,8 +75,10 @@ export class SprintsService {
     }
 
     async udpateSprint(sprintId: string,data:any){
+        console.log("Here......");
         const updatableSprint = await this.findSprintById(sprintId);
         const sprint:any = updatableSprint.sprint;
+        console.log(sprint);
         const {sprintName, status, startDate,endDate} = data;
         
         if(sprintName)
@@ -86,6 +88,7 @@ export class SprintsService {
         sprint.status = status;
 
         if(startDate)
+        console.log("Hero"+startDate+" "+sprint.startDate);
         sprint.startDate = startDate;
 
         if(endDate)
