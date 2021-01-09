@@ -12,14 +12,15 @@ export const SprintSchema = new mongoose.Schema({
     },
     createdAt: {
         type: Date,
-        default: new Date
+        default: new Date()
     },
     startDate: {
         type: Date,
-        deafult: new Date()
+        default: new Date()
     },
     endDate: {
         type: Date,
+        default: null
     },
     status: {
       type: sprintStatus,

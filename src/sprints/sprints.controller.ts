@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req,UsePipes,ValidationPipe, Param, Get } from '@nestjs/common';
+import { Controller, Post, Body, Req,UsePipes,ValidationPipe, Param, Get, Put } from '@nestjs/common';
 import { SprintsService } from './sprints.service';
 import { SprintValidator } from './../utils/validators/sprint.validator';
 
@@ -21,5 +21,10 @@ export class SprintsController {
     @Get('getSprintsByProjectId/projectId/:projectId')
     getSprintsByProject(@Param('projectId') projectId: any){
         return this.sprintService.getSprintsByProject(projectId);
+    }
+
+    @Put('updateSprint/sprintId/:sprintId')
+    updateSprint(@Param('sprintId') sprintId: string, @Body() data: any){
+        return this.sprintService.udpateSprint(sprintId, data);
     }
 }
